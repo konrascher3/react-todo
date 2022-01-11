@@ -6,6 +6,8 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import Checkbox from "@mui/material/Checkbox";
 import Card from "@mui/material/Card";
 import { styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Input from "@mui/material/Input";
 
 import { Column, Grid, Row } from "@contour/react";
 import { ThemeProvider, css, Global } from "@emotion/react";
@@ -23,13 +25,19 @@ const normalize = css`
 	}
 `;
 
+/*styled.div = styled("div")*/
 const CardWrapper = styled("div")`
 	display: flex;
 	justify-content: space-between;
+	gap: inherit;
 `;
+
+/*const StyledCard2 = { button: { backgroundColor: "blue" } };*/
 
 const StyledCard = styled(Card)`
 	width: 100%;
+
+	/* TODO: Add Card Test-classes from MUI API */
 `;
 
 const muiTheme = createTheme({
@@ -84,34 +92,54 @@ const StyledColumn = styled(Column)`
 	gap: ${({ theme }) => theme.spacing(2)};
 `;
 
+const StyledTextField = styled(TextField)`
+	width: 100%;
+`;
+
+const StyledBox = styled(Box)`
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+`;
+
+const handleEditInputChange = event_ => {
+	setCurrentTodo({ ...currentTodo, name: event_.target.value });
+};
+
 const App2 = () => {
 	const [todos, setTodos] = useState([
 		{
 			name: "Play Guitar",
 			checked: false,
+			isEditing: false,
 		},
 		{
 			name: "Buy Crypto",
 			checked: false,
+			isEditing: false,
 		},
 		{
 			name: "Watch Netflix",
 			checked: false,
+			isEditing: false,
 		},
 	]);
 	const [text, setText] = useState("");
+	const [isEditing, setIsEditing] = useState(false);
+	const [currentTodo, setCurrentTodo] = useState({});
+
 	return (
 		<div>
 			<h1>My solution</h1>
 			<ThemeProvider theme={muiTheme}>
 				<ThemeProvider theme={contourTheme}>
 					<Global styles={normalize} />
-					{/* In this case: 'Stack'-component from MUI */}
+					{/* TODO: In this case: 'Stack'-component from MUI */}
 					<Grid strategy="grid">
 						<StyledColumn colStart={{ m: 2, l: 4, xl: 4 }} colSpan={{ m: 6 }}>
 							{/*<Row strategy="grid" colCount={{ xs: 1, s: 1, m: 1, l: 1, xl: 1 }}>*/}
-							<ButtonGroup>
-								<TextField
+							<Row strategy="grid" colCount={{ xs: 1, s: 1, m: 1, l: 1, xl: 1 }}>
+								<StyledTextField
 									size="small"
 									type="text"
 									value={text}
@@ -120,19 +148,24 @@ const App2 = () => {
 									}}
 									label="Add Todo"
 								/>
+
 								<Button
 									variant="contained"
 									disabled={!text}
-									onClick={() => {
+									onSubmit={() => {
 										const newArray = [...todos];
-										newArray.push({ name: text });
+										newArray.push({
+											name: text,
+											checked: false,
+											isEditing: false,
+										});
 										setTodos(newArray);
 										setText("");
 									}}
 								>
 									Add
 								</Button>
-							</ButtonGroup>
+							</Row>
 							{todos.map((todo, index) => (
 								<CardWrapper key={index}>
 									<StyledCard>
@@ -144,18 +177,39 @@ const App2 = () => {
 												setTodos(newArray);
 											}}
 										/>
-										<span
-											style={
-												todo.checked
-													? { textDecoration: "line-through" }
-													: { textDecoration: "none" }
-											}
-										>
-											{todo.name}
-										</span>
+										{todo.isEditing ? (
+											<Input value={todo.name} />
+										) : (
+											<span
+												style={
+													todo.checked
+														? { textDecoration: "line-through" }
+														: { textDecoration: "none" }
+												}
+											>
+												{todo.name}
+											</span>
+										)}
 									</StyledCard>
+
+									<Button
+										variant="outlined"
+										color="primary"
+										onClick={() => {
+											const newArray = [...todos];
+											newArray[index].isEditing = !newArray[index].isEditing;
+											setTodos(newArray);
+											console.log(todo.isEditing);
+
+											if (todo.isEditing) {
+											}
+										}}
+									>
+										{todo.isEditing ? "Save" : "Edit"}
+									</Button>
 									<Button
 										variant="contained"
+										color="error"
 										onClick={() => {
 											const newArray = [...todos];
 											newArray.splice(index, 1);
