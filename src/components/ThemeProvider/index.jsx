@@ -5,6 +5,7 @@ import {
 	defaultTheme,
 	createMediaQueries,
 } from "@contour/theme";
+import { createTheme } from "@mui/material/styles";
 
 const muiTheme = createTheme({
 	typography: {
@@ -56,9 +57,13 @@ const contourTheme = createContourTheme({
 
 const ThemeProvider = ({ children }) => {
 	return (
-		<ThemeProvider theme={muiTheme}>
-			<ThemeProvider theme={contourTheme}>{children}</ThemeProvider>
-		</ThemeProvider>
+		<>
+			{/*<ThemeProvider theme={muiTheme}>*/}
+			{/*<ThemeProvider theme={contourTheme}>*/}
+			{children}
+			{/*</ThemeProvider>*/}
+			{/*</ThemeProvider>*/}
+		</>
 	);
 };
 
