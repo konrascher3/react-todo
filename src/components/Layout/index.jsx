@@ -5,7 +5,7 @@ import { styled } from "@mui/material/styles";
 
 const StyledColumn = styled(Column)`
 	display: grid;
-	gap: ${({ theme }) => theme.spacing(2)};
+	gap: ${({ theme }) => theme.spacing(1)};
 `;
 
 const normalize = css`

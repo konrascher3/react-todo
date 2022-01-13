@@ -8,7 +8,7 @@ import Card from "@mui/material/Card";
 const CardWrapper = styled("div")`
 	display: flex;
 	justify-content: space-between;
-	gap: inherit;
+	gap: 0.5em;
 `;
 
 const StyledCard = styled(Card)`
